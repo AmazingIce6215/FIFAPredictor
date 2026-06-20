@@ -11,7 +11,6 @@ import {
   formatDate,
   formatTime,
   getStageLabel,
-  getCountryCode,
 } from '@/lib/utils'
 import LivePulse from '@/components/ui/LivePulse'
 import PredictionCard from '@/components/ui/PredictionCard'
@@ -21,7 +20,7 @@ import { MatchData } from '@/lib/types'
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 export default function MatchDetailPage({ params }: { params: { id: string } }) {
-  const { data: matchData, isLoading: matchLoading } = useSWR<MatchData>(
+  const { data: matchesData, isLoading: matchLoading } = useSWR<{ matches: MatchData[] }>(
     `/api/matches`,
     fetcher
   )
@@ -41,12 +40,14 @@ export default function MatchDetailPage({ params }: { params: { id: string } }) 
     { revalidateOnFocus: false, dedupingInterval: 300000 }
   )
 
+  const matchId = parseInt(params.id, 10)
+  const match = matchesData?.matches.find((m) => m.id === matchId) ?? null
+
   const { liveData, prediction: livePrediction } = useLiveMatch(
-    isLive(matchData?.status ?? '') ? params.id : ''
+    isLive(match?.status ?? '') ? params.id : ''
   )
 
   const prediction = livePrediction || predictData?.prediction
-  const match = matchData
 
   const isLoading = matchLoading || predictLoading
 
