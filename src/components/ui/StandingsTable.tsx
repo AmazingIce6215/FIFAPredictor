@@ -42,7 +42,7 @@ export default function StandingsTable({ groupName, entries }: StandingsTablePro
               return (
                 <tr
                   key={entry.team.id}
-                  className="border-b border-border/50 transition-colors hover:bg-surface-raised/50"
+                  className="border-b border-border/50 transition-colors duration-200 hover:bg-surface-raised/70 cursor-pointer"
                 >
                   <td className="px-4 py-3">
                     <span className="text-xs font-bold text-text-secondary">{entry.position}</span>

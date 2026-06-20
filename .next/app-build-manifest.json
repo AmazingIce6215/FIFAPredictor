@@ -12,9 +12,20 @@
       "static/chunks/fd9d1056-2120ee41b1911ada.js",
       "static/chunks/117-d3132bb6524de976.js",
       "static/chunks/main-app-93f405c85c5e27a7.js",
-      "static/css/f4a3bfeba1aab99b.css",
+      "static/css/1c10caa4d526cc8a.css",
       "static/chunks/648-7532f1c6d80b6418.js",
       "static/chunks/app/layout-0fac24fedc61cc9b.js"
+    ],
+    "/teams/[id]/page": [
+      "static/chunks/webpack-f9a24ca827be6d65.js",
+      "static/chunks/fd9d1056-2120ee41b1911ada.js",
+      "static/chunks/117-d3132bb6524de976.js",
+      "static/chunks/main-app-93f405c85c5e27a7.js",
+      "static/chunks/71-aebe46bc16a8a4f4.js",
+      "static/chunks/105-da0f9935abe203ff.js",
+      "static/chunks/648-7532f1c6d80b6418.js",
+      "static/chunks/242-9db4de6b27daafe6.js",
+      "static/chunks/app/teams/[id]/page-6fccef47b8232942.js"
     ],
     "/bracket/page": [
       "static/chunks/webpack-f9a24ca827be6d65.js",
@@ -22,17 +33,7 @@
       "static/chunks/117-d3132bb6524de976.js",
       "static/chunks/main-app-93f405c85c5e27a7.js",
       "static/chunks/71-aebe46bc16a8a4f4.js",
-      "static/chunks/app/bracket/page-08a3eda4a56669ce.js"
-    ],
-    "/matches/[id]/page": [
-      "static/chunks/webpack-f9a24ca827be6d65.js",
-      "static/chunks/fd9d1056-2120ee41b1911ada.js",
-      "static/chunks/117-d3132bb6524de976.js",
-      "static/chunks/main-app-93f405c85c5e27a7.js",
-      "static/chunks/71-aebe46bc16a8a4f4.js",
-      "static/chunks/105-da0f9935abe203ff.js",
-      "static/chunks/237-e9978e26e39c181c.js",
-      "static/chunks/app/matches/[id]/page-6cda7d548132c61c.js"
+      "static/chunks/app/bracket/page-5448b02f00674945.js"
     ],
     "/page": [
       "static/chunks/webpack-f9a24ca827be6d65.js",
@@ -42,8 +43,8 @@
       "static/chunks/71-aebe46bc16a8a4f4.js",
       "static/chunks/105-da0f9935abe203ff.js",
       "static/chunks/648-7532f1c6d80b6418.js",
-      "static/chunks/87-f4afc77b761788a1.js",
-      "static/chunks/app/page-85d1a7eee0b49bcb.js"
+      "static/chunks/242-9db4de6b27daafe6.js",
+      "static/chunks/app/page-64b197e165c82d3e.js"
     ],
     "/standings/page": [
       "static/chunks/webpack-f9a24ca827be6d65.js",
@@ -52,7 +53,7 @@
       "static/chunks/main-app-93f405c85c5e27a7.js",
       "static/chunks/71-aebe46bc16a8a4f4.js",
       "static/chunks/105-da0f9935abe203ff.js",
-      "static/chunks/app/standings/page-5acb2abb7aada420.js"
+      "static/chunks/app/standings/page-46234924da5ea1f9.js"
     ],
     "/teams/page": [
       "static/chunks/webpack-f9a24ca827be6d65.js",
@@ -64,17 +65,6 @@
       "static/chunks/648-7532f1c6d80b6418.js",
       "static/chunks/app/teams/page-34012501fa5f8be2.js"
     ],
-    "/teams/[id]/page": [
-      "static/chunks/webpack-f9a24ca827be6d65.js",
-      "static/chunks/fd9d1056-2120ee41b1911ada.js",
-      "static/chunks/117-d3132bb6524de976.js",
-      "static/chunks/main-app-93f405c85c5e27a7.js",
-      "static/chunks/71-aebe46bc16a8a4f4.js",
-      "static/chunks/105-da0f9935abe203ff.js",
-      "static/chunks/648-7532f1c6d80b6418.js",
-      "static/chunks/87-f4afc77b761788a1.js",
-      "static/chunks/app/teams/[id]/page-500cc2d8ed78cc1c.js"
-    ],
     "/matches/page": [
       "static/chunks/webpack-f9a24ca827be6d65.js",
       "static/chunks/fd9d1056-2120ee41b1911ada.js",
@@ -83,7 +73,18 @@
       "static/chunks/71-aebe46bc16a8a4f4.js",
       "static/chunks/105-da0f9935abe203ff.js",
       "static/chunks/648-7532f1c6d80b6418.js",
-      "static/chunks/app/matches/page-5b5c3fe68bfaf6b1.js"
+      "static/chunks/242-9db4de6b27daafe6.js",
+      "static/chunks/app/matches/page-219f738cc8b0266a.js"
+    ],
+    "/matches/[id]/page": [
+      "static/chunks/webpack-f9a24ca827be6d65.js",
+      "static/chunks/fd9d1056-2120ee41b1911ada.js",
+      "static/chunks/117-d3132bb6524de976.js",
+      "static/chunks/main-app-93f405c85c5e27a7.js",
+      "static/chunks/71-aebe46bc16a8a4f4.js",
+      "static/chunks/105-da0f9935abe203ff.js",
+      "static/chunks/237-e9978e26e39c181c.js",
+      "static/chunks/app/matches/[id]/page-d2e1744442d115ab.js"
     ]
   }
 }

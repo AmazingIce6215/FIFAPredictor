@@ -135,9 +135,14 @@ export default function MatchDetailPage({ params }: { params: { id: string } }) 
                 </div>
               )}
               {live && (
-                <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-live-red/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-live-red">
-                  {liveData?.minute}&apos;
-                </span>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-live-red/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-live-red">
+                    {liveData?.minute}&apos;
+                  </span>
+                  <span className="text-[10px] text-text-muted">
+                    updating every 60s
+                  </span>
+                </div>
               )}
             </div>
 
@@ -253,18 +258,23 @@ export default function MatchDetailPage({ params }: { params: { id: string } }) 
         <div className="glass rounded-xl p-6">
           <div className="mb-4 flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-live-red opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-live-red" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-live-red opacity-60" style={{ animationDuration: '2s' }} />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-live-red shadow-[0_0_8px_rgba(229,62,62,0.6)]" />
             </span>
             <h3 className="text-sm font-bold font-display uppercase tracking-wider text-live-red">
               Live Events
             </h3>
-            <span className="text-xs text-text-muted">· Updating every 60s</span>
+            <span className="text-[10px] text-text-muted">· Auto-refreshing</span>
           </div>
           <div className="flex items-center justify-center py-8">
             <p className="text-xs text-text-secondary">
               Live events feed will appear here as match progresses.
             </p>
+          </div>
+          <div className="mt-2 text-right">
+            <span className="text-[10px] text-text-muted">
+              Last updated just now
+            </span>
           </div>
         </div>
       )}

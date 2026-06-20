@@ -107,7 +107,7 @@ export default function BracketPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: rIdx * 0.1 + sIdx * 0.05 }}
-                    className="glass rounded-lg p-3 min-h-[80px] flex flex-col justify-center"
+                    className="glass glass-hover rounded-lg p-3 min-h-[80px] flex flex-col justify-center transition-all duration-200"
                   >
                     <span className="mb-1.5 text-[9px] font-semibold uppercase tracking-wider text-text-muted">
                       {slot.matchLabel}
