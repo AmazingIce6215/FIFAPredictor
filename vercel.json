@@ -1,8 +1,11 @@
 {
-  "version": 2,
+  "framework": "nextjs",
   "functions": {
-    "api/proxy.js": {
-      "maxDuration": 10
+    "api/predict/route.ts": {
+      "maxDuration": 30
+    },
+    "api/live/*/route.ts": {
+      "maxDuration": 30
     }
   }
 }

@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #040D1A;
+  --surface: #0A1628;
+  --surface-raised: #0F1E35;
+  --border: #1A2E4A;
+  --border-bright: #254266;
+
+  --gold: #C9A84C;
+  --gold-bright: #E8C96A;
+  --gold-muted: #8B7035;
+
+  --text-primary: #F0F4F8;
+  --text-secondary: #8BA4C0;
+  --text-muted: #4A6580;
+
+  --live-red: #E53E3E;
+  --win-green: #38A169;
+  --draw-gray: #718096;
+  --loss-blue: #3182CE;
+
+  --form-win: #276749;
+  --form-draw: #744210;
+  --form-loss: #742A2A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  .glass {
+    background: linear-gradient(135deg, rgba(15, 30, 53, 0.8) 0%, rgba(10, 22, 40, 0.6) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+  }
+  .glass-hover:hover {
+    border-color: var(--border-bright);
+  }
+  .text-glow-gold {
+    text-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+  }
+  .live-pulse {
+    box-shadow: 0 0 8px rgba(229, 62, 62, 0.6), 0 0 16px rgba(229, 62, 62, 0.3);
+  }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(229, 62, 62, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-pulse {
+  background: linear-gradient(90deg, var(--surface-raised) 25%, var(--border) 50%, var(--surface-raised) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-bright);
+}
