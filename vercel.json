@@ -1,11 +1,3 @@
 {
-  "framework": "nextjs",
-  "functions": {
-    "api/predict/route.ts": {
-      "maxDuration": 30
-    },
-    "api/live/*/route.ts": {
-      "maxDuration": 30
-    }
-  }
+  "framework": "nextjs"
 }
