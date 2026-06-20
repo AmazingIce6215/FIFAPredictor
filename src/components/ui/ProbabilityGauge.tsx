@@ -21,7 +21,7 @@ export default function ProbabilityGauge({
   const offset = circumference - (probability / 100) * circumference
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="relative flex flex-col items-center gap-1">
       <svg width={size} height={size} className="rotate-[-90deg]">
         <circle
           cx={size / 2}
@@ -45,7 +45,7 @@ export default function ProbabilityGauge({
           transition={{ type: 'spring', stiffness: 60, damping: 15 }}
         />
       </svg>
-      <div className="absolute flex flex-col items-center justify-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
         <motion.span
           className="text-2xl font-bold font-display text-text-primary tabular-nums"
           initial={{ opacity: 0 }}
@@ -53,7 +53,7 @@ export default function ProbabilityGauge({
         >
           {probability}%
         </motion.span>
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+        <span className="text-[9px] font-semibold uppercase tracking-wider text-text-muted">
           {label}
         </span>
       </div>

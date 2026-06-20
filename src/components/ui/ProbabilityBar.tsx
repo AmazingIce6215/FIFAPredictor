@@ -25,40 +25,40 @@ export default function ProbabilityBar({
 
   return (
     <div className="w-full">
-      <div className="flex h-8 w-full overflow-hidden rounded-md">
+      <div className="flex h-7 w-full overflow-hidden rounded-lg ring-1 ring-white/5">
         <motion.div
-          className="flex items-center justify-start bg-win-green px-2 text-xs font-bold text-white"
+          className="flex items-center justify-start bg-gradient-to-r from-win/90 to-win/70 px-2 text-[10px] font-bold text-white"
           style={{ width: `${homeWin}%` }}
           initial={animated ? { width: 0 } : undefined}
           animate={{ width: `${homeWin}%` }}
           transition={animated ? spring : undefined}
         >
-          {homeWin > 10 && <span className="tabular-nums">{homeWin}%</span>}
+          {homeWin > 10 && <span className="tabular-nums">{Math.round(homeWin)}%</span>}
         </motion.div>
         <motion.div
-          className="flex items-center justify-center bg-draw-gray px-1 text-xs font-bold text-white"
+          className="flex items-center justify-center bg-gradient-to-r from-draw/70 to-draw/50 px-1 text-[10px] font-bold text-white"
           style={{ width: `${draw}%` }}
           initial={animated ? { width: 0 } : undefined}
           animate={{ width: `${draw}%` }}
           transition={animated ? spring : undefined}
         >
-          {draw > 8 && <span className="tabular-nums">{draw}%</span>}
+          {draw > 8 && <span className="tabular-nums">{Math.round(draw)}%</span>}
         </motion.div>
         <motion.div
-          className="flex items-center justify-end bg-loss-blue px-2 text-xs font-bold text-white"
+          className="flex items-center justify-end bg-gradient-to-l from-loss/90 to-loss/70 px-2 text-[10px] font-bold text-white"
           style={{ width: `${awayWin}%` }}
           initial={animated ? { width: 0 } : undefined}
           animate={{ width: `${awayWin}%` }}
           transition={animated ? spring : undefined}
         >
-          {awayWin > 10 && <span className="tabular-nums">{awayWin}%</span>}
+          {awayWin > 10 && <span className="tabular-nums">{Math.round(awayWin)}%</span>}
         </motion.div>
       </div>
       {!compact && (
-        <div className="mt-1 flex justify-between text-[11px] text-text-secondary">
-          <span className="font-semibold uppercase">{homeLabel || 'Home'}</span>
-          <span className="font-semibold uppercase">Draw</span>
-          <span className="font-semibold uppercase">{awayLabel || 'Away'}</span>
+        <div className="mt-1.5 flex justify-between text-[10px] text-text-muted">
+          <span className="font-semibold uppercase tracking-wider">{homeLabel || 'Home'}</span>
+          <span className="font-semibold uppercase tracking-wider">Draw</span>
+          <span className="font-semibold uppercase tracking-wider">{awayLabel || 'Away'}</span>
         </div>
       )}
     </div>

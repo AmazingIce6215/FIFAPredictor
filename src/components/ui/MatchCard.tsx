@@ -38,64 +38,69 @@ export default function MatchCard({
     >
       <Link href={`/matches/${match.id}`}>
         <div
-          className={`glass glass-hover group cursor-pointer rounded-xl p-5 transition-all duration-200 hover:scale-[1.01] ${
-            live ? 'border-l-live-red border-l-2' : ''
+          className={`group relative cursor-pointer overflow-hidden rounded-xl border border-border bg-gradient-to-b from-surface to-surface/50 p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_var(--primary-glow)] ${
+            live ? 'border-live-red/40' : ''
           }`}
         >
+          {live && (
+            <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-live-red to-transparent animate-breathe" />
+          )}
+
           <div className="mb-3 flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-raised px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
               {getStageLabel(match.stage)}
               {match.group ? ` · ${match.group}` : ''}
-              {match.matchday ? ` · Matchday ${match.matchday}` : ''}
             </span>
             {live ? (
               <LivePulse status={match.status} />
             ) : (
-              <span className="text-[11px] text-text-muted">
+              <span className="text-[10px] text-text-muted">
                 {finished
                   ? formatDate(match.utcDate)
-                  : `${formatDate(match.utcDate)} · ${formatTime(match.utcDate)}`}
+                  : formatTime(match.utcDate)}
               </span>
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex flex-1 items-center gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-1 items-center gap-2.5">
               <Image
                 src={getFlagUrl(match.homeTeam.country)}
                 alt={match.homeTeam.country}
-                width={32}
-                height={32}
-                className="h-8 w-8 rounded object-contain"
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded object-contain ring-1 ring-border/50"
                 unoptimized
               />
-              <span className="text-sm font-bold font-display text-text-primary group-hover:text-gold-bright transition-colors">
+              <span className="text-sm font-semibold font-display text-text-primary transition-colors group-hover:text-primary-light">
                 {match.homeTeam.shortName || match.homeTeam.name}
               </span>
             </div>
 
             <div className="flex-shrink-0 text-center">
               {live || finished ? (
-                <span className="text-2xl font-bold font-display text-text-primary tabular-nums">
-                  {homeScore ?? '-'}:{awayScore ?? '-'}
+                <span className="text-xl font-bold font-display text-text-primary tabular-nums tracking-tight">
+                  {homeScore ?? '-'}
+                  <span className="mx-1 text-text-muted">:</span>
+                  {awayScore ?? '-'}
                 </span>
               ) : (
-                <span className="text-xs font-semibold text-text-secondary">
+                <span className="text-[11px] font-semibold text-text-secondary">
                   {formatTime(match.utcDate)}
                 </span>
               )}
             </div>
 
-            <div className="flex flex-1 items-center justify-end gap-3">
-              <span className="text-sm font-bold font-display text-text-primary group-hover:text-gold-bright transition-colors">
+            <div className="flex flex-1 items-center justify-end gap-2.5">
+              <span className="text-sm font-semibold font-display text-text-primary transition-colors group-hover:text-primary-light">
                 {match.awayTeam.shortName || match.awayTeam.name}
               </span>
               <Image
                 src={getFlagUrl(match.awayTeam.country)}
                 alt={match.awayTeam.country}
-                width={32}
-                height={32}
-                className="h-8 w-8 rounded object-contain"
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded object-contain ring-1 ring-border/50"
                 unoptimized
               />
             </div>
@@ -115,8 +120,10 @@ export default function MatchCard({
           )}
 
           {prediction && (
-            <div className="mt-2 text-[11px] text-gold">
-              <span className="font-semibold">AI:</span> {prediction}
+            <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-2.5 py-1 text-[10px] font-semibold text-gold">
+              <span>AI</span>
+              <span className="h-1 w-1 rounded-full bg-gold/40" />
+              <span>{prediction}</span>
             </div>
           )}
         </div>

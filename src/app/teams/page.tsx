@@ -22,7 +22,6 @@ export default function TeamsPage() {
     revalidateOnFocus: false,
   })
 
-  // Build team list from GROUPS const
   const allTeams = GROUP_LABELS.flatMap((g) =>
     (GROUPS[g] || []).map((name) => ({
       name,
@@ -38,35 +37,41 @@ export default function TeamsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Users size={20} className="text-gold" />
-          <h1 className="text-xl font-bold font-display uppercase tracking-wider text-text-primary">
-            Teams
-          </h1>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 ring-1 ring-gold/20">
+            <Users size={18} className="text-gold" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold font-display uppercase tracking-wider text-text-primary">
+              Teams
+            </h1>
+            <p className="text-[10px] text-text-muted">{allTeams.length} qualified nations</p>
+          </div>
         </div>
-        <span className="text-xs text-text-muted">{allTeams.length} nations</span>
       </div>
 
+      {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             placeholder="Search teams..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-xs text-text-primary placeholder:text-text-muted focus:border-gold focus:outline-none"
+            className="w-full rounded-xl border border-border bg-surface py-2.5 pl-9 pr-3 text-xs text-text-primary placeholder:text-text-muted focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold/30 transition-all duration-200"
           />
         </div>
         <div className="flex flex-wrap gap-1.5">
           <button
             onClick={() => setSelectedGroup(null)}
-            className={`rounded-lg px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-colors ${
+            className={`rounded-lg px-3.5 py-2 text-[10px] font-bold uppercase tracking-wider transition-all duration-200 ${
               !selectedGroup
-                ? 'bg-gold text-background'
-                : 'border border-border text-text-secondary hover:border-border-bright'
+                ? 'bg-gold text-background shadow-[0_0_15px_rgba(251,191,36,0.2)]'
+                : 'bg-surface text-text-secondary border border-border hover:border-border-bright hover:text-text-primary'
             }`}
           >
             All
@@ -75,23 +80,24 @@ export default function TeamsPage() {
             <button
               key={g}
               onClick={() => setSelectedGroup(g === selectedGroup ? null : g)}
-              className={`rounded-lg px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-colors ${
+              className={`rounded-lg px-3 py-2 text-[10px] font-bold uppercase tracking-wider transition-all duration-200 ${
                 selectedGroup === g
-                  ? 'bg-gold text-background'
-                  : 'border border-border text-text-secondary hover:border-border-bright'
+                  ? 'bg-gold text-background shadow-[0_0_15px_rgba(251,191,36,0.2)]'
+                  : 'bg-surface text-text-secondary border border-border hover:border-border-bright hover:text-text-primary'
               }`}
             >
-              Group {g}
+              {g}
             </button>
           ))}
         </div>
       </div>
 
+      {/* Teams Grid */}
       {isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[...Array(12)].map((_, i) => (
-            <div key={i} className="glass rounded-xl p-5">
-              <div className="skeleton-pulse mx-auto mb-3 h-12 w-12 rounded-full" />
+            <div key={i} className="rounded-xl border border-border bg-surface p-6 text-center">
+              <div className="skeleton-pulse mx-auto mb-3 h-14 w-14 rounded-full" />
               <div className="skeleton-pulse mx-auto h-4 w-24 rounded" />
               <div className="skeleton-pulse mx-auto mt-2 h-3 w-16 rounded" />
             </div>
@@ -111,20 +117,21 @@ export default function TeamsPage() {
               transition={{ delay: i * 0.02 }}
             >
               <Link href={`/teams/${team.id}`}>
-                <div className="glass glass-hover group flex cursor-pointer flex-col items-center gap-3 rounded-xl p-6 text-center transition-all duration-200 hover:scale-[1.02]">
-                  <Image
-                    src={getFlagUrl(team.name)}
-                    alt={team.name}
-                    width={56}
-                    height={56}
-                    className="h-14 w-14 rounded object-contain"
-                    unoptimized
-                  />
-                  <div>
-                    <span className="text-sm font-bold font-display text-text-primary group-hover:text-gold-bright transition-colors">
-                      {team.name.toUpperCase()}
-                    </span>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
+                <div className="group relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-surface to-surface/50 p-6 text-center transition-all duration-300 hover:border-gold/30 hover:shadow-[0_0_25px_rgba(251,191,36,0.08)] hover:-translate-y-0.5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-gold/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="relative">
+                    <Image
+                      src={getFlagUrl(team.name)}
+                      alt={team.name}
+                      width={56}
+                      height={56}
+                      className="mx-auto h-14 w-14 rounded-full object-contain ring-2 ring-border/50 transition-all duration-300 group-hover:ring-gold/40"
+                      unoptimized
+                    />
+                    <h3 className="mt-3 text-sm font-bold font-display text-text-primary transition-colors duration-200 group-hover:text-gold">
+                      {team.name}
+                    </h3>
+                    <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
                       Group {team.group}
                     </p>
                   </div>

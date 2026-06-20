@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import { Barlow_Condensed, Inter } from 'next/font/google'
+import { Barlow_Condensed, Barlow } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 
-const barlow = Barlow_Condensed({
+const barlowCondensed = Barlow_Condensed({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400', '600', '700', '800'],
   variable: '--font-barlow',
   display: 'swap',
 })
 
-const inter = Inter({
+const barlow = Barlow({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-barlow-body',
   display: 'swap',
 })
 
@@ -30,10 +30,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${barlow.variable} ${inter.variable}`}>
+    <html lang="en" className={`${barlowCondensed.variable} ${barlow.variable}`}>
       <body className="min-h-screen bg-background font-body antialiased">
         <Navbar />
-        <main className="mx-auto max-w-7xl px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w-7xl px-4 pb-16 pt-28 sm:px-6 lg:px-8">
           {children}
         </main>
         <Footer />

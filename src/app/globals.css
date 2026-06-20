@@ -3,28 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --background: #040D1A;
-  --surface: #0A1628;
-  --surface-raised: #0F1E35;
-  --border: #1A2E4A;
-  --border-bright: #254266;
+  --background: #0A0A0F;
+  --surface: #14141F;
+  --surface-raised: #1E1E2E;
+  --surface-hover: #282840;
+  --border: #2A2A3E;
+  --border-bright: #3E3E5C;
 
-  --gold: #C9A84C;
-  --gold-bright: #E8C96A;
-  --gold-muted: #8B7035;
+  --primary: #DC2626;
+  --primary-dark: #B91C1C;
+  --primary-light: #FCA5A5;
+  --primary-glow: rgba(220, 38, 38, 0.25);
 
-  --text-primary: #F0F4F8;
-  --text-secondary: #8BA4C0;
-  --text-muted: #4A6580;
+  --gold: #FBBF24;
+  --gold-bright: #FCD34D;
+  --gold-muted: #92400E;
+  --gold-glow: rgba(251, 191, 36, 0.2);
 
-  --live-red: #E53E3E;
-  --win-green: #38A169;
-  --draw-gray: #718096;
-  --loss-blue: #3182CE;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
 
-  --form-win: #276749;
-  --form-draw: #744210;
-  --form-loss: #742A2A;
+  --win: #22C55E;
+  --win-dark: #166534;
+  --draw: #A3A3A3;
+  --draw-dark: #525252;
+  --loss: #EF4444;
+  --loss-dark: #991B1B;
+
+  --live-red: #EF4444;
+  --live-glow: rgba(239, 68, 68, 0.5);
+
+  --form-win: #166534;
+  --form-draw: #713F12;
+  --form-loss: #7F1D1D;
 }
 
 * {
@@ -38,7 +50,7 @@ html {
 body {
   background: var(--background);
   color: var(--text-primary);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-barlow-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -49,35 +61,76 @@ body {
   border-radius: 4px;
 }
 
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
 @layer utilities {
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
   .glass {
-    background: linear-gradient(135deg, rgba(15, 30, 53, 0.8) 0%, rgba(10, 22, 40, 0.6) 100%);
-    backdrop-filter: blur(12px);
+    background: linear-gradient(135deg, rgba(30, 30, 46, 0.7) 0%, rgba(20, 20, 31, 0.5) 100%);
+    backdrop-filter: blur(16px);
     border: 1px solid var(--border);
   }
   .glass-hover:hover {
     border-color: var(--border-bright);
+    background: linear-gradient(135deg, rgba(40, 40, 64, 0.8) 0%, rgba(30, 30, 46, 0.6) 100%);
   }
-  .text-glow-gold {
-    text-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+  .glass-red {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, rgba(20, 20, 31, 0.4) 100%);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(220, 38, 38, 0.25);
+  }
+  .glass-red:hover {
+    border-color: rgba(220, 38, 38, 0.5);
+  }
+  .glass-gold {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(20, 20, 31, 0.4) 100%);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+  }
+  .glass-gold:hover {
+    border-color: rgba(251, 191, 36, 0.4);
+  }
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #FBBF24, #FCD34D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-red {
+    background: linear-gradient(135deg, #DC2626, #EF4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   .live-pulse {
-    box-shadow: 0 0 8px rgba(229, 62, 62, 0.6), 0 0 16px rgba(229, 62, 62, 0.3);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.6), 0 0 24px rgba(239, 68, 68, 0.3);
   }
 }
 
 @keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.6); }
-  50% { box-shadow: 0 0 0 6px rgba(229, 62, 62, 0.2); }
-  100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.15); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 .skeleton-pulse {

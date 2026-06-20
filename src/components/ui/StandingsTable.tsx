@@ -10,16 +10,16 @@ interface StandingsTableProps {
 
 export default function StandingsTable({ groupName, entries }: StandingsTableProps) {
   return (
-    <div className="glass rounded-xl overflow-hidden">
+    <div className="overflow-hidden rounded-xl border border-border bg-gradient-to-b from-surface to-surface/50">
       <div className="border-b border-border px-5 py-3">
-        <h3 className="text-sm font-bold font-display text-gold uppercase tracking-wider">
+        <h3 className="text-sm font-bold font-display text-gradient-gold uppercase tracking-wider">
           Group {groupName}
         </h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-border text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+            <tr className="border-b border-border/50 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
               <th className="px-4 py-3 w-8">#</th>
               <th className="px-4 py-3">Team</th>
               <th className="px-3 py-3 text-center">P</th>
@@ -37,15 +37,22 @@ export default function StandingsTable({ groupName, entries }: StandingsTablePro
             {entries.map((entry) => {
               const gd = entry.goalDifference
               const gdColor =
-                gd > 0 ? 'text-win-green' : gd < 0 ? 'text-live-red' : 'text-text-secondary'
+                gd > 0 ? 'text-win' : gd < 0 ? 'text-loss' : 'text-text-muted'
+              const isTopTwo = entry.position <= 2
 
               return (
                 <tr
                   key={entry.team.id}
-                  className="border-b border-border/50 transition-colors duration-200 hover:bg-surface-raised/70 cursor-pointer"
+                  className={`border-b border-border/30 transition-colors duration-200 hover:bg-surface-raised/50 cursor-pointer ${
+                    isTopTwo ? 'bg-win/5' : ''
+                  }`}
                 >
                   <td className="px-4 py-3">
-                    <span className="text-xs font-bold text-text-secondary">{entry.position}</span>
+                    <span className={`text-xs font-bold tabular-nums ${
+                      isTopTwo ? 'text-gold' : 'text-text-muted'
+                    }`}>
+                      {entry.position}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
@@ -57,12 +64,12 @@ export default function StandingsTable({ groupName, entries }: StandingsTablePro
                         className="h-5 w-5 rounded object-contain"
                         unoptimized
                       />
-                      <span className="text-xs font-semibold text-text-primary">
+                      <span className="text-[11px] font-bold text-text-primary tracking-wide">
                         {entry.team.name}
                       </span>
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-center text-xs text-text-primary tabular-nums">
+                  <td className="px-3 py-3 text-center text-xs text-text-primary tabular-nums font-medium">
                     {entry.playedGames}
                   </td>
                   <td className="px-3 py-3 text-center text-xs text-text-primary tabular-nums">
@@ -80,10 +87,10 @@ export default function StandingsTable({ groupName, entries }: StandingsTablePro
                   <td className="px-3 py-3 text-center text-xs text-text-primary tabular-nums">
                     {entry.goalsAgainst}
                   </td>
-                  <td className={`px-3 py-3 text-center text-xs font-semibold tabular-nums ${gdColor}`}>
+                  <td className={`px-3 py-3 text-center text-xs font-bold tabular-nums ${gdColor}`}>
                     {gd > 0 ? '+' : ''}{gd}
                   </td>
-                  <td className="px-3 py-3 text-center text-sm font-bold font-display text-text-primary tabular-nums">
+                  <td className="px-3 py-3 text-center text-sm font-bold font-display text-gold tabular-nums">
                     {entry.points}
                   </td>
                   <td className="px-3 py-3">
