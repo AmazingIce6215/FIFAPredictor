@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { StandingEntry } from '@/lib/types'
-import { getFlagUrl } from '@/lib/utils'
+import { getTeamFlagSrc } from '@/lib/utils'
 import FormBadge from './FormBadge'
 
 interface StandingsTableProps {
@@ -57,8 +57,8 @@ export default function StandingsTable({ groupName, entries }: StandingsTablePro
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
                       <Image
-                        src={getFlagUrl(entry.team.country)}
-                        alt={entry.team.country}
+                        src={getTeamFlagSrc(entry.team)}
+                        alt={entry.team.country || entry.team.name}
                         width={20}
                         height={20}
                         className="h-5 w-5 rounded object-contain"

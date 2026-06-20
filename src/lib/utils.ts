@@ -1,12 +1,40 @@
 import { COUNTRY_TO_CODE } from './country-codes'
+import { TeamInfo } from './types'
+
+const COUNTRY_ALIASES: Record<string, string> = {
+  'USA': 'us',
+  'Korea Republic': 'kr',
+  'IR Iran': 'ir',
+  "Côte d'Ivoire": 'ci',
+  'DR Congo': 'cd',
+  'Russia': 'ru',
+  'Czech Republic': 'cz',
+}
 
 export function getCountryCode(countryName: string): string {
-  return COUNTRY_TO_CODE[countryName] || 'xx'
+  if (!countryName) return 'xx'
+  const direct = COUNTRY_TO_CODE[countryName]
+  if (direct) return direct
+  const alias = COUNTRY_ALIASES[countryName]
+  if (alias) return alias
+  const lower = countryName.toLowerCase()
+  for (const [key, code] of Object.entries(COUNTRY_TO_CODE)) {
+    if (key.toLowerCase() === lower) return code
+  }
+  for (const [key, code] of Object.entries(COUNTRY_ALIASES)) {
+    if (key.toLowerCase() === lower) return code
+  }
+  return 'xx'
 }
 
 export function getFlagUrl(countryName: string): string {
   const code = getCountryCode(countryName)
   return `https://flagcdn.com/w80/${code}.png`
+}
+
+export function getTeamFlagSrc(team: TeamInfo): string {
+  if (team.crest) return team.crest
+  return getFlagUrl(team.country || team.name)
 }
 
 export function formatDate(dateString: string): string {

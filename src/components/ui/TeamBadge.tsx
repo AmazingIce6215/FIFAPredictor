@@ -11,14 +11,14 @@ interface TeamBadgeProps {
 export default function TeamBadge({ name, crest, country, size = 'md' }: TeamBadgeProps) {
   const dimensions = { sm: 24, md: 36, lg: 64 }
   const dim = dimensions[size]
-  const flagUrl = getFlagUrl(country)
+  const src = crest || getFlagUrl(country)
 
   return (
     <div className="flex items-center gap-2.5">
       <div className="relative flex-shrink-0" style={{ width: dim, height: dim }}>
         <Image
-          src={flagUrl}
-          alt={country}
+          src={src}
+          alt={country || name}
           width={dim}
           height={dim}
           className="rounded object-contain ring-1 ring-border/30"

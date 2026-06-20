@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MatchData } from '@/lib/types'
-import { isLive, getFlagUrl, formatDate, formatTime, getStageLabel } from '@/lib/utils'
+import { isLive, getTeamFlagSrc, formatDate, formatTime, getStageLabel } from '@/lib/utils'
 import LivePulse from './LivePulse'
 import ProbabilityBar from './ProbabilityBar'
 
@@ -65,8 +65,8 @@ export default function MatchCard({
           <div className="flex items-center justify-between gap-3">
             <div className="flex flex-1 items-center gap-2.5">
               <Image
-                src={getFlagUrl(match.homeTeam.country)}
-                alt={match.homeTeam.country}
+                src={getTeamFlagSrc(match.homeTeam)}
+                alt={match.homeTeam.country || match.homeTeam.name}
                 width={28}
                 height={28}
                 className="h-7 w-7 rounded object-contain ring-1 ring-border/50"
@@ -96,8 +96,8 @@ export default function MatchCard({
                 {match.awayTeam.shortName || match.awayTeam.name}
               </span>
               <Image
-                src={getFlagUrl(match.awayTeam.country)}
-                alt={match.awayTeam.country}
+                src={getTeamFlagSrc(match.awayTeam)}
+                alt={match.awayTeam.country || match.awayTeam.name}
                 width={28}
                 height={28}
                 className="h-7 w-7 rounded object-contain ring-1 ring-border/50"

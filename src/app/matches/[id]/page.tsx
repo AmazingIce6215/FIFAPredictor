@@ -7,7 +7,7 @@ import { Clock, BarChart3, Target } from 'lucide-react'
 import { useLiveMatch } from '@/hooks/useLiveMatch'
 import {
   isLive,
-  getFlagUrl,
+  getTeamFlagSrc,
   formatDate,
   formatTime,
   getStageLabel,
@@ -114,8 +114,8 @@ export default function MatchDetailPage({ params }: { params: { id: string } }) 
             <div className="flex flex-col items-center gap-3">
               <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-surface-raised ring-2 ring-border/50 md:h-24 md:w-24">
                 <Image
-                  src={getFlagUrl(match.homeTeam.country)}
-                  alt={match.homeTeam.country}
+                  src={getTeamFlagSrc(match.homeTeam)}
+                  alt={match.homeTeam.country || match.homeTeam.name}
                   width={96}
                   height={96}
                   className="h-full w-full object-contain p-2"
@@ -156,8 +156,8 @@ export default function MatchDetailPage({ params }: { params: { id: string } }) 
             <div className="flex flex-col items-center gap-3">
               <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-surface-raised ring-2 ring-border/50 md:h-24 md:w-24">
                 <Image
-                  src={getFlagUrl(match.awayTeam.country)}
-                  alt={match.awayTeam.country}
+                  src={getTeamFlagSrc(match.awayTeam)}
+                  alt={match.awayTeam.country || match.awayTeam.name}
                   width={96}
                   height={96}
                   className="h-full w-full object-contain p-2"
