@@ -279,7 +279,7 @@
 </footer>
 
 <script>
-const API = 'https://wheniskickoff.com/data/v1';
+const API = '/api/proxy?type=';
 const REFRESH = 30000;
 let mm=[],tt=[],gg=[],tab='all';
 
@@ -291,15 +291,22 @@ function cls(m){
   return d<n?'f':'u';
 }
 
-async function load(){
-  const[a,b,c]=await Promise.all([
-    fetch(API+'/matches.json'),
-    fetch(API+'/teams.json'),
-    fetch(API+'/groups.json')
-  ]);
-  mm=(await a.json()).data||[];
-  tt=(await b.json()).data||[];
-  gg=(await c.json()).data||[];
+async function load(retries=2){
+  for(let i=0;i<=retries;i++){
+    try{
+      const[a,b,c]=await Promise.all([
+        fetch(API+'matches',{signal:AbortSignal.timeout(8000)}),
+        fetch(API+'teams',{signal:AbortSignal.timeout(8000)}),
+        fetch(API+'groups',{signal:AbortSignal.timeout(8000)})
+      ]);
+      const[j,k,l]=await Promise.all([a.json(),b.json(),c.json()]);
+      mm=j.data||[];tt=k.data||[];gg=l.data||[];
+      return;
+    }catch(e){
+      if(i===retries)throw e;
+      await new Promise(r=>setTimeout(r,1000*(i+1)));
+    }
+  }
 }
 
 function pred(h,a,ph){
@@ -460,7 +467,7 @@ function ref(){
 
 async function boot(){
   try{await load();ref()}
-  catch(e){document.getElementById('content').innerHTML='<div class="empty-state"><div class="e-icon">⚠️</div><p>Could not load match data.</p><p style="font-size:11px;color:var(--text-muted);margin-top:4px;">'+e.message+'</p></div>'}
+  catch(e){const ct=document.getElementById('content');ct.innerHTML='<div class="empty-state"><div class="e-icon">⚠️</div><p>Could not load match data.</p><p style="font-size:11px;color:var(--text-muted);margin-top:4px;">'+e.name+': '+e.message+'</p><button onclick="boot()" style="margin-top:12px;padding:8px 20px;border:1px solid var(--border);border-radius:8px;background:var(--bg-card);color:var(--text);font-size:13px;cursor:pointer;font-family:var(--font)">↻ Retry</button></div>'}
 }
 
 document.addEventListener('click',e=>{
