@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
+import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Swords, Users, LayoutGrid, GitBranch, ChevronRight } from 'lucide-react'
 import FootballGL from '@/components/ui/FootballGL'
 import { MatchData, StandingTable } from '@/lib/types'
-import { isLive } from '@/lib/utils'
+import { isLive, getTeamFlagSrc, formatTime, getStageLabel } from '@/lib/utils'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -45,26 +47,6 @@ function LiveDot({ withText = true }: { withText?: boolean }) {
         </span>
       )}
     </span>
-  )
-}
-
-function FormBadge({ results }: { results: ('W' | 'D' | 'L')[] }) {
-  const styles = {
-    W: 'bg-[#0D3320] text-volt border-volt/20',
-    D: 'bg-[#2A2010] text-gold border-gold/20',
-    L: 'bg-[#2D0F0F] text-red border-red/20',
-  }
-  return (
-    <div className="flex gap-[3px] justify-center">
-      {results.map((v, i) => (
-        <span
-          key={i}
-          className={`inline-flex h-5 w-5 items-center justify-center rounded text-[9px] font-bold border ${styles[v]}`}
-        >
-          {v}
-        </span>
-      ))}
-    </div>
   )
 }
 
@@ -114,65 +96,102 @@ function ProbBar({
 }
 
 function MatchCard({
-  live, hFlag, aFlag, hTeam, aTeam, hForm, aForm, score, min, time, group, stage, hp, dp, ap, note, delay,
+  match, index = 0, homeWinProb, drawProb, awayWinProb,
 }: {
-  live: boolean; hFlag: string; aFlag: string; hTeam: string; aTeam: string
-  hForm: ('W' | 'D' | 'L')[]; aForm: ('W' | 'D' | 'L')[]
-  score?: [string, string]; min?: string; time?: string
-  group: string; stage: string; hp: number; dp: number; ap: number
-  note: string; delay: number
+  match: MatchData; index?: number
+  homeWinProb?: number; drawProb?: number; awayWinProb?: number
 }) {
+  const live = isLive(match.status)
+  const finished = match.status === 'FINISHED'
+  const homeScore = match.score.fullTime.home
+  const awayScore = match.score.fullTime.away
+  const hasProbs = homeWinProb !== undefined && drawProb !== undefined && awayWinProb !== undefined
+  const now = new Date()
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: delay * 0.001, duration: 0.4 }}
-      className="rounded-xl border p-5 relative overflow-hidden bg-card"
-      style={{ borderColor: live ? 'rgba(255,48,48,0.15)' : 'var(--border)' }}
-    >
-      {live && <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-red" />}
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">{group} · {stage}</span>
-        {live ? <LiveDot /> : <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-gold">{time}</span>}
-      </div>
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex-1 text-center">
-          <div className="text-[30px] mb-1">{hFlag}</div>
-          <div className="text-[11px] font-bold tracking-[0.07em] text-chalk mb-1.5">{hTeam}</div>
-          <FormBadge results={hForm} />
-        </div>
-        <div className="text-center px-3.5">
-          {score ? (
-            <>
-              <div className="font-display text-[44px] leading-none tracking-[0.06em] text-chalk">
-                {score[0]}<span className="text-smoke text-[28px] mx-1">:</span>{score[1]}
-              </div>
-              {live && <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-red">{min}&apos;</div>}
-            </>
-          ) : (
-            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke">VS</span>
+    <Link href={`/matches/${match.id}`} className="no-underline block">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.05, duration: 0.4 }}
+        className="rounded-xl border p-5 relative overflow-hidden bg-card cursor-pointer hover:opacity-85 transition-opacity"
+        style={{ borderColor: live ? 'rgba(255,48,48,0.15)' : 'var(--border)' }}
+      >
+        {live && <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-red" />}
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">
+            {getStageLabel(match.stage)}{match.group ? ` · ${match.group}` : ''}
+          </span>
+          {live ? <LiveDot /> : (
+            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-gold">
+              {finished ? new Date(match.utcDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : formatTime(match.utcDate)}
+            </span>
           )}
         </div>
-        <div className="flex-1 text-center">
-          <div className="text-[30px] mb-1">{aFlag}</div>
-          <div className="text-[11px] font-bold tracking-[0.07em] text-chalk mb-1.5">{aTeam}</div>
-          <FormBadge results={aForm} />
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex-1 text-center">
+            <Image
+              src={getTeamFlagSrc(match.homeTeam)}
+              alt={match.homeTeam.country || match.homeTeam.name}
+              width={30}
+              height={30}
+              className="mx-auto mb-1 rounded object-contain"
+              unoptimized
+            />
+            <div className="text-[11px] font-bold tracking-[0.07em] text-chalk mb-1.5">
+              {match.homeTeam.shortName || match.homeTeam.name}
+            </div>
+          </div>
+          <div className="text-center px-3.5">
+            {live || finished ? (
+              <div className="font-display text-[44px] leading-none tracking-[0.06em] text-chalk">
+                {homeScore ?? '-'}<span className="text-smoke text-[28px] mx-1">:</span>{awayScore ?? '-'}
+              </div>
+            ) : (
+              <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke">
+                {formatTime(match.utcDate)}
+              </span>
+            )}
+          </div>
+          <div className="flex-1 text-center">
+            <Image
+              src={getTeamFlagSrc(match.awayTeam)}
+              alt={match.awayTeam.country || match.awayTeam.name}
+              width={30}
+              height={30}
+              className="mx-auto mb-1 rounded object-contain"
+              unoptimized
+            />
+            <div className="text-[11px] font-bold tracking-[0.07em] text-chalk mb-1.5">
+              {match.awayTeam.shortName || match.awayTeam.name}
+            </div>
+          </div>
         </div>
-      </div>
-      <ProbBar h={hp} d={dp} a={ap} ht={hTeam.slice(0, 3)} at={aTeam.slice(0, 3)} delay={delay} />
-      <div
-        className="mt-3.5 p-2.5 rounded-lg text-[10px] border"
-        style={{
-          background: live ? 'rgba(255,48,48,0.03)' : 'rgba(255,215,0,0.03)',
-          borderColor: live ? 'rgba(255,48,48,0.08)' : 'rgba(255,215,0,0.08)',
-        }}
-      >
-        <div className="text-[9px] font-semibold uppercase tracking-[0.08em] mb-1" style={{ color: live ? 'var(--red)' : 'var(--gold)' }}>
-          AI ANALYSIS · GROQ LLAMA-3.3-70B
+        {hasProbs && (
+          <ProbBar h={homeWinProb} d={drawProb} a={awayWinProb}
+            ht={(match.homeTeam.shortName || match.homeTeam.name).slice(0, 3)}
+            at={(match.awayTeam.shortName || match.awayTeam.name).slice(0, 3)}
+            delay={index * 200}
+          />
+        )}
+        <div
+          className="mt-3.5 p-2.5 rounded-lg text-[10px] border"
+          style={{
+            background: live ? 'rgba(255,48,48,0.03)' : 'rgba(255,215,0,0.03)',
+            borderColor: live ? 'rgba(255,48,48,0.08)' : 'rgba(255,215,0,0.08)',
+          }}
+        >
+          <div className="text-[9px] font-semibold uppercase tracking-[0.08em] mb-1" style={{ color: live ? 'var(--red)' : 'var(--gold)' }}>
+            AI PREDICTION · {getStageLabel(match.stage)}
+          </div>
+          <div className="text-[11px] leading-relaxed text-ash">
+            {live
+              ? `${match.homeTeam.shortName || match.homeTeam.name} ${homeScore ?? 0} – ${awayScore ?? 0} ${match.awayTeam.shortName || match.awayTeam.name} · ${getStageLabel(match.stage)} action`
+              : `${match.homeTeam.shortName || match.homeTeam.name} vs ${match.awayTeam.shortName || match.awayTeam.name} · ${formatTime(match.utcDate)}`}
+          </div>
         </div>
-        <div className="text-[11px] leading-relaxed text-ash">{note}</div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   )
 }
 
@@ -208,24 +227,12 @@ export default function HomePage() {
     { t: "67'", tag: 'Now', p: 64, now: true },
   ]
 
-  const sampleMatches = [
-    {
-      live: true, hFlag: '🇧🇷', aFlag: '🇩🇪', hTeam: 'BRAZIL', aTeam: 'GERMANY',
-      hForm: ['W', 'W', 'D', 'W', 'W'] as ('W' | 'D' | 'L')[],
-      aForm: ['W', 'D', 'W', 'L', 'W'] as ('W' | 'D' | 'L')[],
-      score: ['2', '1'] as [string, string], min: '67', group: 'GROUP A', stage: 'MATCHDAY 2',
-      hp: 64, dp: 14, ap: 22, delay: 0,
-      note: "Brazil's lead and sustained possession dominance make them the clear favourite. Germany's equaliser window narrows with each minute.",
-    },
-    {
-      live: false, hFlag: '🇦🇷', aFlag: '🇫🇷', hTeam: 'ARGENTINA', aTeam: 'FRANCE',
-      hForm: ['W', 'W', 'W', 'W', 'D'] as ('W' | 'D' | 'L')[],
-      aForm: ['W', 'W', 'D', 'W', 'W'] as ('W' | 'D' | 'L')[],
-      time: '20:00 UTC', group: 'GROUP C', stage: 'MATCHDAY 2',
-      hp: 42, dp: 23, ap: 35, delay: 200,
-      note: 'A World Cup final rematch. Argentina holds a marginal form edge. Mbappé fitness (rated 78% to start) is the decisive variable today.',
-    },
-  ]
+  const featureMatches =
+    todayMatches.length > 0 ? todayMatches :
+    liveMatches.length > 0 ? liveMatches :
+    upcoming.slice(0, 4)
+
+  const showMatchSection = featureMatches.length > 0 || matchesLoading
 
   const navLinks = [
     { href: '/matches', label: 'Matches', icon: Swords },
@@ -239,31 +246,31 @@ export default function HomePage() {
 
       {/* ── NAVBAR ── */}
       <nav className="flex items-center justify-between px-8 border-b" style={{ height: 52, borderColor: 'var(--border)', background: 'rgba(4,13,26,0.96)' }}>
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 no-underline">
           <span className="text-base">⚽</span>
           <span className="font-display text-base tracking-[0.1em] text-chalk">
             WC26 <span className="text-volt">PREDICT</span>
           </span>
-        </div>
+        </Link>
         <div className="hidden md:flex gap-6">
           {navLinks.map((l) => (
-            <a
+            <Link
               key={l.label}
               href={l.href}
-              className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke hover:text-chalk transition-colors"
+              className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke hover:text-chalk transition-colors no-underline"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border" style={{ borderColor: 'rgba(255,48,48,0.2)', background: 'rgba(255,48,48,0.05)' }}>
+          <Link href="/matches" className="flex items-center gap-1.5 px-3 py-1 rounded-full border no-underline" style={{ borderColor: 'rgba(255,48,48,0.2)', background: 'rgba(255,48,48,0.05)' }}>
             <LiveDot withText={false} />
             <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">{liveMatches.length} LIVE</span>
-          </div>
-          <button className="bg-volt text-[#040D1A] border-none rounded-full px-4 py-[7px] font-bold text-[11px] tracking-[0.05em] cursor-pointer font-body">
+          </Link>
+          <Link href="/matches" className="bg-volt text-[#040D1A] border-none rounded-full px-4 py-[7px] font-bold text-[11px] tracking-[0.05em] cursor-pointer font-body no-underline inline-flex items-center">
             LIVE →
-          </button>
+          </Link>
         </div>
       </nav>
 
@@ -288,12 +295,12 @@ export default function HomePage() {
             Real-time AI predictions using team form, H2H history, player data and live events — updated every 60 seconds via Groq.
           </p>
           <div className="flex gap-2.5">
-            <button className="bg-volt text-[#040D1A] border-none rounded-full px-6 py-[11px] font-bold text-xs tracking-[0.05em] cursor-pointer font-body">
+            <Link href="/matches" className="bg-volt text-[#040D1A] border-none rounded-full px-6 py-[11px] font-bold text-xs tracking-[0.05em] cursor-pointer font-body no-underline inline-flex items-center">
               VIEW LIVE MATCHES
-            </button>
-            <button className="bg-transparent text-chalk rounded-full px-6 py-[11px] text-xs cursor-pointer font-body" style={{ border: '1px solid var(--border-hi)' }}>
+            </Link>
+            <Link href="/matches" className="bg-transparent text-chalk rounded-full px-6 py-[11px] text-xs cursor-pointer font-body no-underline inline-flex items-center" style={{ border: '1px solid var(--border-hi)' }}>
               AI Predictions →
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -330,26 +337,28 @@ export default function HomePage() {
       }} />
 
       {/* ── MATCH CARDS ── */}
-      <section className="px-8 md:px-12 py-8">
-        <div className="flex justify-between items-baseline mb-5">
-          <div>
-            <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt mb-1">
-              TODAY&apos;S MATCHES
+      {featureMatches.length > 0 && (
+        <section className="px-8 md:px-12 py-8">
+          <div className="flex justify-between items-baseline mb-5">
+            <div>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt mb-1">
+                {liveMatches.length > 0 ? 'LIVE MATCHES' : todayMatches.length > 0 ? "TODAY'S MATCHES" : 'UPCOMING MATCHES'}
+              </div>
+              <div className="font-display text-[26px] tracking-[0.05em] text-chalk">
+                AI PREDICTIONS
+              </div>
             </div>
-            <div className="font-display text-[26px] tracking-[0.05em] text-chalk">
-              AI PREDICTIONS
-            </div>
+            <Link href="/matches" className="text-[10px] font-semibold uppercase tracking-[0.08em] text-gold hover:text-chalk transition-colors no-underline flex items-center gap-1">
+              View All <ChevronRight size={12} />
+            </Link>
           </div>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke">
-            JUNE 20, 2026 · GROUP STAGE
-          </span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-          {sampleMatches.map((m, i) => (
-            <MatchCard key={i} {...m} />
-          ))}
-        </div>
-      </section>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {featureMatches.slice(0, 6).map((match, i) => (
+              <MatchCard key={match.id} match={match} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── LIVE PROBABILITY TRACKER ── */}
       <section className="px-8 md:px-12 pb-10">
