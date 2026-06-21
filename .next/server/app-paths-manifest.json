@@ -1,16 +1,16 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/teams/[id]/page": "app/teams/[id]/page.js",
+  "/matches/[id]/page": "app/matches/[id]/page.js",
+  "/matches/page": "app/matches/page.js",
   "/bracket/page": "app/bracket/page.js",
   "/page": "app/page.js",
+  "/teams/[id]/page": "app/teams/[id]/page.js",
   "/standings/page": "app/standings/page.js",
-  "/teams/page": "app/teams/page.js",
-  "/matches/page": "app/matches/page.js",
-  "/matches/[id]/page": "app/matches/[id]/page.js",
-  "/api/predict/route": "app/api/predict/route.js",
   "/api/live/[matchId]/route": "app/api/live/[matchId]/route.js",
+  "/api/predict/route": "app/api/predict/route.js",
+  "/teams/page": "app/teams/page.js",
   "/api/player/[name]/route": "app/api/player/[name]/route.js",
+  "/api/matches/route": "app/api/matches/route.js",
   "/api/standings/route": "app/api/standings/route.js",
-  "/api/team/[id]/route": "app/api/team/[id]/route.js",
-  "/api/matches/route": "app/api/matches/route.js"
+  "/api/team/[id]/route": "app/api/team/[id]/route.js"
 }

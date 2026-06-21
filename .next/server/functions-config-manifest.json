@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/matches":{},"/api/predict":{"maxDuration":30},"/api/live/[matchId]":{"maxDuration":30},"/api/standings":{},"/api/team/[id]":{},"/api/player/[name]":{}}}
+{"version":1,"functions":{"/api/live/[matchId]":{"maxDuration":30},"/api/team/[id]":{},"/api/standings":{},"/api/matches":{},"/api/predict":{"maxDuration":30},"/api/player/[name]":{}}}

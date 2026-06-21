@@ -17,17 +17,21 @@ const config: Config = {
         chalk: 'var(--chalk)',
         ash: 'var(--ash)',
         smoke: 'var(--smoke)',
-        volt: 'var(--volt)',
-        gold: 'var(--gold)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          dark: 'var(--primary-dark)',
+          light: 'var(--primary-light)',
+        },
+        gold: {
+          DEFAULT: 'var(--gold)',
+          light: 'var(--gold-light)',
+        },
         red: 'var(--red)',
-        blue: 'var(--blue)',
+        green: 'var(--green)',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Impact', 'sans-serif'],
+        display: ['var(--font-display)', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
-      },
-      animation: {
-        'live-pulse': 'livePulse 1.8s ease-out infinite',
       },
     },
   },

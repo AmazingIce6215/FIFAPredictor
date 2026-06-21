@@ -23,67 +23,11 @@
       "wasm": [],
       "assets": [],
       "env": {
-        "__NEXT_BUILD_ID": "m2NipGKu6QYMBT2LXflEG",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "8kDDb4oGypNew2Cbeg45j211LfLeQkoebM1BbEZYh4U=",
-        "__NEXT_PREVIEW_MODE_ID": "1d5c403625a26066bf08eb525dc0adc3",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "088e1f136843418a60e093535f059b1b8e8e9e914dee91b7789474787a84fcc5",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "91437cdb7cbe7f9784259d2ecd0117586567ad13ba61d941b047848a76932b78"
-      }
-    },
-    "/api/standings/route": {
-      "files": [
-        "server/middleware-build-manifest.js",
-        "server/middleware-react-loadable-manifest.js",
-        "server/next-font-manifest.js",
-        "server/interception-route-rewrite-manifest.js",
-        "server/edge-runtime-webpack.js",
-        "server/edge-chunks/520.js",
-        "server/app/api/standings/route.js"
-      ],
-      "name": "app/api/standings/route",
-      "page": "/api/standings/route",
-      "matchers": [
-        {
-          "regexp": "^/api/standings$",
-          "originalSource": "/api/standings"
-        }
-      ],
-      "wasm": [],
-      "assets": [],
-      "env": {
-        "__NEXT_BUILD_ID": "m2NipGKu6QYMBT2LXflEG",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "8kDDb4oGypNew2Cbeg45j211LfLeQkoebM1BbEZYh4U=",
-        "__NEXT_PREVIEW_MODE_ID": "1d5c403625a26066bf08eb525dc0adc3",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "088e1f136843418a60e093535f059b1b8e8e9e914dee91b7789474787a84fcc5",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "91437cdb7cbe7f9784259d2ecd0117586567ad13ba61d941b047848a76932b78"
-      }
-    },
-    "/api/team/[id]/route": {
-      "files": [
-        "server/middleware-build-manifest.js",
-        "server/middleware-react-loadable-manifest.js",
-        "server/next-font-manifest.js",
-        "server/interception-route-rewrite-manifest.js",
-        "server/edge-runtime-webpack.js",
-        "server/edge-chunks/520.js",
-        "server/app/api/team/[id]/route.js"
-      ],
-      "name": "app/api/team/[id]/route",
-      "page": "/api/team/[id]/route",
-      "matchers": [
-        {
-          "regexp": "^/api/team/(?<id>[^/]+?)$",
-          "originalSource": "/api/team/[id]"
-        }
-      ],
-      "wasm": [],
-      "assets": [],
-      "env": {
-        "__NEXT_BUILD_ID": "m2NipGKu6QYMBT2LXflEG",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "8kDDb4oGypNew2Cbeg45j211LfLeQkoebM1BbEZYh4U=",
-        "__NEXT_PREVIEW_MODE_ID": "1d5c403625a26066bf08eb525dc0adc3",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "088e1f136843418a60e093535f059b1b8e8e9e914dee91b7789474787a84fcc5",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "91437cdb7cbe7f9784259d2ecd0117586567ad13ba61d941b047848a76932b78"
+        "__NEXT_BUILD_ID": "V23KKQpGiF3jXKUU2c-P7",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "NdME+4Ks0MRgWoYT0UjMp/MPT/aZhVbr4yZlDPVP/Fo=",
+        "__NEXT_PREVIEW_MODE_ID": "aaf282fde1cf177fe4b6135a7e89da40",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "3b770f3eb7591382541214a5a0b624534af67922a672713cd22e3860cb1ba1e4",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "573e447fc49f2d4c909c7a4832d0d26c026a5618befb98e93b5b891af2e24c4f"
       }
     },
     "/api/matches/route": {
@@ -107,11 +51,67 @@
       "wasm": [],
       "assets": [],
       "env": {
-        "__NEXT_BUILD_ID": "m2NipGKu6QYMBT2LXflEG",
-        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "8kDDb4oGypNew2Cbeg45j211LfLeQkoebM1BbEZYh4U=",
-        "__NEXT_PREVIEW_MODE_ID": "1d5c403625a26066bf08eb525dc0adc3",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "088e1f136843418a60e093535f059b1b8e8e9e914dee91b7789474787a84fcc5",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "91437cdb7cbe7f9784259d2ecd0117586567ad13ba61d941b047848a76932b78"
+        "__NEXT_BUILD_ID": "V23KKQpGiF3jXKUU2c-P7",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "NdME+4Ks0MRgWoYT0UjMp/MPT/aZhVbr4yZlDPVP/Fo=",
+        "__NEXT_PREVIEW_MODE_ID": "aaf282fde1cf177fe4b6135a7e89da40",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "3b770f3eb7591382541214a5a0b624534af67922a672713cd22e3860cb1ba1e4",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "573e447fc49f2d4c909c7a4832d0d26c026a5618befb98e93b5b891af2e24c4f"
+      }
+    },
+    "/api/standings/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/middleware-react-loadable-manifest.js",
+        "server/next-font-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/edge-chunks/520.js",
+        "server/app/api/standings/route.js"
+      ],
+      "name": "app/api/standings/route",
+      "page": "/api/standings/route",
+      "matchers": [
+        {
+          "regexp": "^/api/standings$",
+          "originalSource": "/api/standings"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "V23KKQpGiF3jXKUU2c-P7",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "NdME+4Ks0MRgWoYT0UjMp/MPT/aZhVbr4yZlDPVP/Fo=",
+        "__NEXT_PREVIEW_MODE_ID": "aaf282fde1cf177fe4b6135a7e89da40",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "3b770f3eb7591382541214a5a0b624534af67922a672713cd22e3860cb1ba1e4",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "573e447fc49f2d4c909c7a4832d0d26c026a5618befb98e93b5b891af2e24c4f"
+      }
+    },
+    "/api/team/[id]/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/middleware-react-loadable-manifest.js",
+        "server/next-font-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/edge-chunks/520.js",
+        "server/app/api/team/[id]/route.js"
+      ],
+      "name": "app/api/team/[id]/route",
+      "page": "/api/team/[id]/route",
+      "matchers": [
+        {
+          "regexp": "^/api/team/(?<id>[^/]+?)$",
+          "originalSource": "/api/team/[id]"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "V23KKQpGiF3jXKUU2c-P7",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "NdME+4Ks0MRgWoYT0UjMp/MPT/aZhVbr4yZlDPVP/Fo=",
+        "__NEXT_PREVIEW_MODE_ID": "aaf282fde1cf177fe4b6135a7e89da40",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "3b770f3eb7591382541214a5a0b624534af67922a672713cd22e3860cb1ba1e4",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "573e447fc49f2d4c909c7a4832d0d26c026a5618befb98e93b5b891af2e24c4f"
       }
     }
   },

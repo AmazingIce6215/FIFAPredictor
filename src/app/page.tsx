@@ -1,14 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Swords, Users, LayoutGrid, GitBranch, ChevronRight } from 'lucide-react'
-import FootballGL from '@/components/ui/FootballGL'
+import { Swords, Users, LayoutGrid, GitBranch, ChevronRight, Trophy, Clock, Activity } from 'lucide-react'
 import { MatchData, StandingTable } from '@/lib/types'
-import { isLive, getTeamFlagSrc, formatTime, getStageLabel } from '@/lib/utils'
+import { isLive, getTeamFlagSrc, formatTime, formatDate, getStageLabel } from '@/lib/utils'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -34,160 +33,83 @@ function getLiveMatches(matches: MatchData[]): MatchData[] {
   return matches.filter((m) => isLive(m.status))
 }
 
-function LiveDot({ withText = true }: { withText?: boolean }) {
-  return (
-    <span className="inline-flex items-center gap-1.5">
-      <span className="relative inline-block h-2 w-2">
-        <span className="absolute inset-0 rounded-full bg-red" />
-        <span className="absolute inset-0 animate-live-pulse rounded-full bg-red" />
-      </span>
-      {withText && (
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-red">
-          LIVE
-        </span>
-      )}
-    </span>
-  )
-}
-
-function ProbBar({
-  h, d, a, ht, at, delay = 0,
-}: {
-  h: number; d: number; a: number; ht: string; at: string; delay?: number
-}) {
-  const [go, setGo] = useState(false)
-  useEffect(() => {
-    const t = setTimeout(() => setGo(true), delay + 500)
-    return () => clearTimeout(t)
-  }, [delay])
-
-  const segs = [
-    { w: h, bg: 'bg-volt', r: 'rounded-l-sm' },
-    { w: d, bg: 'bg-smoke', r: '' },
-    { w: a, bg: 'bg-blue', r: 'rounded-r-sm' },
-  ]
-
-  return (
-    <div>
-      <div className="flex justify-between mb-1.5">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">{ht}</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">DRAW</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">{at}</span>
-      </div>
-      <div className="flex h-1 rounded-sm overflow-hidden bg-surface gap-px">
-        {segs.map((s, i) => (
-          <div
-            key={i}
-            className={`${s.bg} ${s.r}`}
-            style={{
-              width: go ? `${s.w}%` : '0%',
-              transition: `width 0.9s cubic-bezier(0.34,1.26,0.64,1) ${i * 0.08}s`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="flex justify-between mt-1.5">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt">{h}%</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke">{d}%</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-blue">{a}%</span>
-      </div>
-    </div>
-  )
-}
-
-function MatchCard({
-  match, index = 0, homeWinProb, drawProb, awayWinProb,
-}: {
-  match: MatchData; index?: number
-  homeWinProb?: number; drawProb?: number; awayWinProb?: number
-}) {
+function MatchCard({ match, index = 0 }: { match: MatchData; index?: number }) {
   const live = isLive(match.status)
   const finished = match.status === 'FINISHED'
   const homeScore = match.score.fullTime.home
   const awayScore = match.score.fullTime.away
-  const hasProbs = homeWinProb !== undefined && drawProb !== undefined && awayWinProb !== undefined
-  const now = new Date()
 
   return (
-    <Link href={`/matches/${match.id}`} className="no-underline block">
+    <Link href={`/matches/${match.id}`} className="no-underline block group">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.05, duration: 0.4 }}
-        className="rounded-xl border p-5 relative overflow-hidden bg-card cursor-pointer hover:opacity-85 transition-opacity"
-        style={{ borderColor: live ? 'rgba(255,48,48,0.15)' : 'var(--border)' }}
+        transition={{ delay: index * 0.05, duration: 0.3 }}
+        className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all cursor-pointer"
       >
-        {live && <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-red" />}
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             {getStageLabel(match.stage)}{match.group ? ` · ${match.group}` : ''}
           </span>
-          {live ? <LiveDot /> : (
-            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-gold">
-              {finished ? new Date(match.utcDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : formatTime(match.utcDate)}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {live && (
+              <span className="flex items-center gap-1 text-xs font-bold text-red-600">
+                <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                LIVE
+              </span>
+            )}
+            {!live && (
+              <span className="text-xs font-medium text-gray-400">
+                {finished ? formatDate(match.utcDate) : formatTime(match.utcDate)}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex items-center justify-between mb-5">
+
+        <div className="flex items-center justify-between gap-3">
           <div className="flex-1 text-center">
             <Image
               src={getTeamFlagSrc(match.homeTeam)}
               alt={match.homeTeam.country || match.homeTeam.name}
-              width={30}
-              height={30}
-              className="mx-auto mb-1 rounded object-contain"
+              width={44}
+              height={44}
+              className="mx-auto mb-2 object-contain"
               unoptimized
             />
-            <div className="text-[11px] font-bold tracking-[0.07em] text-chalk mb-1.5">
+            <div className="text-sm font-semibold text-gray-900 leading-tight">
               {match.homeTeam.shortName || match.homeTeam.name}
             </div>
           </div>
-          <div className="text-center px-3.5">
+
+          <div className="text-center shrink-0 px-2">
             {live || finished ? (
-              <div className="font-display text-[44px] leading-none tracking-[0.06em] text-chalk">
-                {homeScore ?? '-'}<span className="text-smoke text-[28px] mx-1">:</span>{awayScore ?? '-'}
+              <div className="text-3xl font-bold text-gray-900 tabular-nums tracking-tight">
+                <span>{homeScore ?? '-'}</span>
+                <span className="text-gray-300 text-2xl mx-1">:</span>
+                <span>{awayScore ?? '-'}</span>
               </div>
             ) : (
-              <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke">
-                {formatTime(match.utcDate)}
-              </span>
+              <div className="flex flex-col items-center">
+                <Clock size={16} className="text-gray-400 mb-1" />
+                <span className="text-sm font-semibold text-gray-700 tabular-nums">
+                  {formatTime(match.utcDate)}
+                </span>
+              </div>
             )}
           </div>
+
           <div className="flex-1 text-center">
             <Image
               src={getTeamFlagSrc(match.awayTeam)}
               alt={match.awayTeam.country || match.awayTeam.name}
-              width={30}
-              height={30}
-              className="mx-auto mb-1 rounded object-contain"
+              width={44}
+              height={44}
+              className="mx-auto mb-2 object-contain"
               unoptimized
             />
-            <div className="text-[11px] font-bold tracking-[0.07em] text-chalk mb-1.5">
+            <div className="text-sm font-semibold text-gray-900 leading-tight">
               {match.awayTeam.shortName || match.awayTeam.name}
             </div>
-          </div>
-        </div>
-        {hasProbs && (
-          <ProbBar h={homeWinProb} d={drawProb} a={awayWinProb}
-            ht={(match.homeTeam.shortName || match.homeTeam.name).slice(0, 3)}
-            at={(match.awayTeam.shortName || match.awayTeam.name).slice(0, 3)}
-            delay={index * 200}
-          />
-        )}
-        <div
-          className="mt-3.5 p-2.5 rounded-lg text-[10px] border"
-          style={{
-            background: live ? 'rgba(255,48,48,0.03)' : 'rgba(255,215,0,0.03)',
-            borderColor: live ? 'rgba(255,48,48,0.08)' : 'rgba(255,215,0,0.08)',
-          }}
-        >
-          <div className="text-[9px] font-semibold uppercase tracking-[0.08em] mb-1" style={{ color: live ? 'var(--red)' : 'var(--gold)' }}>
-            AI PREDICTION · {getStageLabel(match.stage)}
-          </div>
-          <div className="text-[11px] leading-relaxed text-ash">
-            {live
-              ? `${match.homeTeam.shortName || match.homeTeam.name} ${homeScore ?? 0} – ${awayScore ?? 0} ${match.awayTeam.shortName || match.awayTeam.name} · ${getStageLabel(match.stage)} action`
-              : `${match.homeTeam.shortName || match.homeTeam.name} vs ${match.awayTeam.shortName || match.awayTeam.name} · ${formatTime(match.utcDate)}`}
           </div>
         </div>
       </motion.div>
@@ -217,22 +139,15 @@ export default function HomePage() {
   const todayMatches = getTodayMatches(matches)
   const upcoming = getUpcomingMatches(matches)
 
-  const timeline = [
-    { t: "1'", tag: 'Kickoff', p: 45 },
-    { t: "23'", tag: 'Yellow', p: 47 },
-    { t: "38'", tag: '⚽ Goal', p: 58, ev: true },
-    { t: "51'", tag: '⚽ Goal', p: 63, ev: true },
-    { t: "55'", tag: '⚽ Gegn.', p: 60 },
-    { t: "62'", tag: 'Yellow', p: 61 },
-    { t: "67'", tag: 'Now', p: 64, now: true },
-  ]
-
-  const featureMatches =
-    todayMatches.length > 0 ? todayMatches :
+  const displayMatches =
     liveMatches.length > 0 ? liveMatches :
-    upcoming.slice(0, 4)
+    todayMatches.length > 0 ? todayMatches :
+    upcoming
 
-  const showMatchSection = featureMatches.length > 0 || matchesLoading
+  const sectionTitle =
+    liveMatches.length > 0 ? 'Live Matches' :
+    todayMatches.length > 0 ? "Today's Matches" :
+    'Upcoming Matches'
 
   const navLinks = [
     { href: '/matches', label: 'Matches', icon: Swords },
@@ -242,302 +157,165 @@ export default function HomePage() {
   ]
 
   return (
-    <div style={{ background: 'var(--bg)', minHeight: '100vh', color: 'var(--chalk)' }}>
-
-      {/* ── NAVBAR ── */}
-      <nav className="flex items-center justify-between px-8 border-b" style={{ height: 52, borderColor: 'var(--border)', background: 'rgba(4,13,26,0.96)' }}>
-        <Link href="/" className="flex items-center gap-2 no-underline">
-          <span className="text-base">⚽</span>
-          <span className="font-display text-base tracking-[0.1em] text-chalk">
-            WC26 <span className="text-volt">PREDICT</span>
-          </span>
-        </Link>
-        <div className="hidden md:flex gap-6">
-          {navLinks.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke hover:text-chalk transition-colors no-underline"
-            >
-              {l.label}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center gap-3 no-underline">
+              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-900 text-white">
+                <Trophy size={16} />
+              </div>
+              <div>
+                <div className="text-base font-bold text-blue-900 leading-tight">WC26</div>
+                <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Predictor</div>
+              </div>
             </Link>
-          ))}
-        </div>
-        <div className="flex items-center gap-2.5">
-          <Link href="/matches" className="flex items-center gap-1.5 px-3 py-1 rounded-full border no-underline" style={{ borderColor: 'rgba(255,48,48,0.2)', background: 'rgba(255,48,48,0.05)' }}>
-            <LiveDot withText={false} />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash">{liveMatches.length} LIVE</span>
-          </Link>
-          <Link href="/matches" className="bg-volt text-[#040D1A] border-none rounded-full px-4 py-[7px] font-bold text-[11px] tracking-[0.05em] cursor-pointer font-body no-underline inline-flex items-center">
-            LIVE →
-          </Link>
-        </div>
-      </nav>
 
-      {/* ── HERO ── */}
-      <section className="px-8 md:px-12 flex items-center justify-between relative overflow-hidden" style={{ paddingTop: 52, paddingBottom: 40 }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 50% 80% at 72% 45%,rgba(0,255,135,0.045) 0%,transparent 70%)',
-        }} />
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 55% 50% at 18% 80%,rgba(77,158,255,0.03) 0%,transparent 70%)',
-        }} />
-
-        <div className="max-w-lg relative z-10">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt mb-3.5">
-            FIFA WORLD CUP 2026 · AI PREDICTION ENGINE
-          </div>
-          <h1 className="font-display text-[74px] leading-[0.88] tracking-[-0.01em] mb-6 text-chalk">
-            PREDICT<br />THE<br />
-            <span className="text-transparent" style={{ WebkitTextStroke: '1.5px var(--volt)' }}>BEAUTIFUL</span><br />GAME
-          </h1>
-          <p className="text-sm leading-relaxed text-ash max-w-sm mb-7">
-            Real-time AI predictions using team form, H2H history, player data and live events — updated every 60 seconds via Groq.
-          </p>
-          <div className="flex gap-2.5">
-            <Link href="/matches" className="bg-volt text-[#040D1A] border-none rounded-full px-6 py-[11px] font-bold text-xs tracking-[0.05em] cursor-pointer font-body no-underline inline-flex items-center">
-              VIEW LIVE MATCHES
-            </Link>
-            <Link href="/matches" className="bg-transparent text-chalk rounded-full px-6 py-[11px] text-xs cursor-pointer font-body no-underline inline-flex items-center" style={{ border: '1px solid var(--border-hi)' }}>
-              AI Predictions →
-            </Link>
-          </div>
-        </div>
-
-        <div className="relative z-10 flex flex-col items-center gap-4 hidden lg:flex">
-          <div className="relative">
-            <div className="absolute -inset-12 pointer-events-none rounded-full" style={{
-              background: 'radial-gradient(circle,rgba(0,255,135,0.1) 0%,transparent 70%)',
-            }} />
-            <FootballGL size={250} />
-          </div>
-          {/* Stage tracker */}
-          <div className="flex gap-1.5 items-center">
-            {[['GROUP', '›'], ['R32', '›'], ['R16', '›'], ['QF', '›'], ['SF', '›'], ['FINAL', '']].map(([s, arrow], i) => (
-              <div key={s} className="flex items-center gap-1.5">
-                <div
-                  className="px-[7px] py-[3px] rounded text-[9px] font-semibold uppercase tracking-[0.08em]"
-                  style={{
-                    color: i === 0 ? 'var(--volt)' : 'var(--smoke)',
-                    background: i === 0 ? 'rgba(0,255,135,0.07)' : 'transparent',
-                    border: i === 0 ? '1px solid rgba(0,255,135,0.15)' : '1px solid var(--border)',
-                  }}
+            <nav className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-900 hover:bg-blue-50 transition-colors no-underline"
                 >
-                  {s}
-                </div>
-                {arrow && <span className="text-[9px] text-smoke">{arrow}</span>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                  <link.icon size={15} />
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-      <div className="h-px mx-8 md:mx-12" style={{
-        background: 'linear-gradient(90deg,transparent,var(--border),transparent)',
-      }} />
-
-      {/* ── MATCH CARDS ── */}
-      {featureMatches.length > 0 && (
-        <section className="px-8 md:px-12 py-8">
-          <div className="flex justify-between items-baseline mb-5">
-            <div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt mb-1">
-                {liveMatches.length > 0 ? 'LIVE MATCHES' : todayMatches.length > 0 ? "TODAY'S MATCHES" : 'UPCOMING MATCHES'}
-              </div>
-              <div className="font-display text-[26px] tracking-[0.05em] text-chalk">
-                AI PREDICTIONS
-              </div>
-            </div>
-            <Link href="/matches" className="text-[10px] font-semibold uppercase tracking-[0.08em] text-gold hover:text-chalk transition-colors no-underline flex items-center gap-1">
-              View All <ChevronRight size={12} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {featureMatches.slice(0, 6).map((match, i) => (
-              <MatchCard key={match.id} match={match} index={i} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── LIVE PROBABILITY TRACKER ── */}
-      <section className="px-8 md:px-12 pb-10">
-        <div className="rounded-xl border p-5" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt mb-1">
-                LIVE PROBABILITY TRACKER
-              </div>
-              <div className="font-display text-[22px] tracking-[0.05em] text-chalk">
-                BRAZIL WIN % · UPDATES EVERY 60 SECONDS
-              </div>
-            </div>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke">
-              LAST UPDATE 8s AGO
-            </span>
-          </div>
-          <div className="flex gap-2.5 items-end h-[72px] mb-2.5">
-            {timeline.map(({ t, p, ev, now }, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                <span
-                  className="text-[10px] font-semibold"
-                  style={{ color: now ? 'var(--volt)' : ev ? 'var(--volt)' : 'var(--smoke)' }}
+            <div className="flex items-center gap-3">
+              {liveMatches.length > 0 && (
+                <Link
+                  href="/matches"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 border border-red-200 no-underline"
                 >
-                  {p}%
-                </span>
-                <div
-                  className="w-full rounded-t-sm"
-                  style={{
-                    height: `${(p / 75) * 100}%`,
-                    background: now ? 'var(--volt)' : ev ? 'rgba(0,255,135,0.5)' : 'rgba(0,255,135,0.2)',
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-2.5">
-            {timeline.map(({ t, tag, ev, now }, i) => (
-              <div
-                key={i}
-                className="flex-1 p-1.5 rounded-md"
-                style={{
-                  background: 'var(--card)',
-                  border: now ? '1px solid rgba(0,255,135,0.2)' : '1px solid var(--border)',
-                }}
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                  <span className="text-xs font-bold text-red-600 uppercase">{liveMatches.length} Live</span>
+                </Link>
+              )}
+              <Link
+                href="/matches"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold hover:bg-blue-800 transition-colors no-underline"
               >
-                <div
-                  className="text-[9px] font-semibold uppercase tracking-[0.08em] mb-0.5"
-                  style={{ color: now ? 'var(--volt)' : 'var(--smoke)' }}
-                >
-                  {t}
-                </div>
-                <div
-                  className="text-[11px]"
-                  style={{ color: ev ? 'var(--volt)' : 'var(--ash)' }}
-                >
-                  {tag}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── DESIGN TOKEN STRIP ── */}
-      <section className="px-8 md:px-12 pb-10">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-smoke mb-3">
-          PITCH DARK — DESIGN TOKEN REFERENCE
-        </div>
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-2 mb-4">
-          {[
-            { n: 'Void', v: '#040D1A', t: '#F0F4F8' },
-            { n: 'Surface', v: '#071525', t: '#F0F4F8' },
-            { n: 'Card', v: '#0A1A30', t: '#F0F4F8' },
-            { n: 'Chalk', v: '#F0F4F8', t: '#040D1A' },
-            { n: 'Turf Volt ★', v: '#00FF87', t: '#040D1A' },
-            { n: 'Gold Cup', v: '#FFD700', t: '#040D1A' },
-            { n: 'Live Red', v: '#FF3030', t: '#F0F4F8' },
-            { n: 'Away Blue', v: '#4D9EFF', t: '#F0F4F8' },
-          ].map(({ n, v, t }) => (
-            <div
-              key={n}
-              className="rounded-lg p-[11px] border"
-              style={{ background: v, borderColor: 'rgba(240,244,248,0.07)' }}
-            >
-              <div className="text-[9px] font-bold uppercase tracking-[0.04em] mb-1" style={{ color: t }}>
-                {n}
-              </div>
-              <div className="text-[9px] font-mono" style={{ color: `${t}AA` }}>{v}</div>
+                <Activity size={14} />
+                Live
+              </Link>
             </div>
-          ))}
-        </div>
-        <div
-          className="flex items-center gap-5 p-3.5 rounded-lg border"
-          style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
-        >
-          <span className="font-display text-[40px] tracking-[0.02em] text-chalk">Bebas Neue</span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-volt">Display · Scores · All headings</span>
-          <span className="w-px h-6" style={{ background: 'var(--border)' }} />
-          <span className="text-sm text-ash">Inter — body, labels, stats, captions, data text</span>
-          <span className="w-px h-6" style={{ background: 'var(--border)' }} />
-          <span className="text-[11px] font-mono text-smoke">tabular-nums for all stat values</span>
-        </div>
-      </section>
-
-      {/* ── FOOTER ── */}
-      <div className="border-t px-8 md:px-12 py-4 flex justify-between" style={{ borderColor: 'var(--border)' }}>
-        <span className="font-display text-[13px] tracking-[0.1em] text-smoke">
-          WC26 PREDICT · PITCH DARK SYSTEM
-        </span>
-        <span className="text-[11px] text-smoke">
-          Groq llama-3.3-70b · football-data.org · api-sports.io · TheSportsDB
-        </span>
-      </div>
-
-      {/* ── Group Standings (preserved from original) ── */}
-      {standings.length > 0 && (
-        <section className="px-8 md:px-12 pb-10">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="font-display text-[22px] tracking-[0.05em] text-chalk">
-              Group Standings
-            </h2>
-            <button
-              onClick={() => setShowAllGroups(!showAllGroups)}
-              className="text-[10px] font-semibold uppercase tracking-[0.08em] text-gold hover:text-chalk transition-colors flex items-center gap-1"
-            >
-              {showAllGroups ? 'Show Less' : 'Show All'}
-              <ChevronRight size={12} />
-            </button>
           </div>
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {(showAllGroups ? standings : standings.slice(0, 4)).map((st) => (
-              <div
-                key={st.group || st.stage}
-                className="rounded-xl border p-4"
-                style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Featured Section */}
+        {displayMatches.length > 0 && (
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">{sectionTitle}</h2>
+                <p className="text-sm text-gray-500 mt-0.5">FIFA World Cup 2026 · AI Predictions</p>
+              </div>
+              <Link
+                href="/matches"
+                className="flex items-center gap-1 text-sm font-semibold text-blue-900 hover:text-blue-700 no-underline"
               >
-                <div className="text-[10px] font-semibold uppercase tracking-[0.08em] text-ash mb-3">
-                  {st.group || st.stage}
-                </div>
-                {st.table.map((entry) => (
-                  <div key={entry.team.id} className="flex items-center justify-between py-1.5 text-xs border-b last:border-0" style={{ borderColor: 'var(--border)' }}>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold text-smoke w-4">{entry.position}</span>
-                      <span className="text-chalk font-medium">{entry.team.shortName || entry.team.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-ash text-[10px]">
-                      <span>{entry.playedGames}</span>
-                      <span>{entry.won}</span>
-                      <span>{entry.draw}</span>
-                      <span>{entry.lost}</span>
-                      <span className="font-bold text-chalk">{entry.points}</span>
-                    </div>
+                View All <ChevronRight size={16} />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {displayMatches.slice(0, 6).map((match, i) => (
+                <MatchCard key={match.id} match={match} index={i} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Group Standings */}
+        {standings.length > 0 && (
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Group Standings</h2>
+              <button
+                onClick={() => setShowAllGroups(!showAllGroups)}
+                className="flex items-center gap-1 text-sm font-semibold text-blue-900 hover:text-blue-700"
+              >
+                {showAllGroups ? 'Show Less' : 'Show All'}
+                <ChevronRight size={16} />
+              </button>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {(showAllGroups ? standings : standings.slice(0, 4)).map((st) => (
+                <div key={st.group || st.stage} className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                  <div className="text-sm font-bold text-gray-700 mb-4 uppercase tracking-wider">
+                    {st.group || st.stage}
                   </div>
-                ))}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs font-semibold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-100">
+                      <span className="w-6" />
+                      <span className="flex-1">Team</span>
+                      <span className="w-6 text-center">P</span>
+                      <span className="w-6 text-center">W</span>
+                      <span className="w-6 text-center">D</span>
+                      <span className="w-6 text-center">L</span>
+                      <span className="w-7 text-center">Pts</span>
+                    </div>
+                    {st.table.map((entry) => (
+                      <div key={entry.team.id} className="flex items-center justify-between py-2 text-sm border-b border-gray-50 last:border-0">
+                        <span className="w-6 text-sm font-bold text-gray-400">{entry.position}</span>
+                        <span className="flex-1 font-medium text-gray-800">{entry.team.shortName || entry.team.name}</span>
+                        <span className="w-6 text-center text-gray-600">{entry.playedGames}</span>
+                        <span className="w-6 text-center text-gray-600">{entry.won}</span>
+                        <span className="w-6 text-center text-gray-600">{entry.draw}</span>
+                        <span className="w-6 text-center text-gray-600">{entry.lost}</span>
+                        <span className="w-7 text-center font-bold text-blue-900">{entry.points}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Loading State */}
+        {matchesLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
+                <div className="skeleton-pulse mb-4 h-4 w-24 rounded" />
+                <div className="flex items-center gap-4">
+                  <div className="flex-1 text-center">
+                    <div className="skeleton-pulse w-11 h-11 rounded-full mx-auto mb-2" />
+                    <div className="skeleton-pulse h-4 w-20 mx-auto rounded" />
+                  </div>
+                  <div className="skeleton-pulse h-8 w-16 rounded" />
+                  <div className="flex-1 text-center">
+                    <div className="skeleton-pulse w-11 h-11 rounded-full mx-auto mb-2" />
+                    <div className="skeleton-pulse h-4 w-20 mx-auto rounded" />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </main>
 
-      {/* Loading State */}
-      {matchesLoading && (
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-8 md:px-12 pb-10">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="rounded-xl border p-5" style={{ borderColor: 'var(--border)', background: 'var(--card)' }}>
-              <div className="skeleton-pulse mb-3 h-3 w-24 rounded" />
-              <div className="flex items-center gap-3">
-                <div className="skeleton-pulse h-8 w-8 shrink-0 rounded-full" />
-                <div className="skeleton-pulse h-4 flex-1 rounded" />
-                <div className="skeleton-pulse h-8 w-16 shrink-0 rounded" />
-                <div className="skeleton-pulse h-4 flex-1 rounded" />
-                <div className="skeleton-pulse h-8 w-8 shrink-0 rounded-full" />
-              </div>
-              <div className="skeleton-pulse mt-3 h-3 w-full rounded" />
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Trophy size={14} className="text-blue-900" />
+              WC26 Predictor
             </div>
-          ))}
+            <div className="text-xs text-gray-400">
+              Data: football-data.org · api-sports.io · TheSportsDB
+            </div>
+          </div>
         </div>
-      )}
+      </footer>
     </div>
   )
 }
