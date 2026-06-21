@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getMatchById } from '@/lib/football-data'
-import { generateFallbackPrediction } from '@/lib/groq-predict'
+import { generateMatchPrediction } from '@/lib/groq-predict'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -29,16 +29,9 @@ export async function GET(
       events: [],
     }
 
-    let prediction = null
-    try {
-      const { generateMatchPrediction } = await import('@/lib/groq-predict')
-      prediction = await generateMatchPrediction(params.matchId, match, liveData)
-    } catch (e) {
-      console.warn('[api/live] Groq prediction failed, using fallback')
-    }
-
+    const prediction = await generateMatchPrediction(params.matchId, match, liveData)
     if (!prediction) {
-      prediction = await generateFallbackPrediction(match)
+      return NextResponse.json({ error: 'AI prediction failed', code: 503 }, { status: 503 })
     }
 
     return NextResponse.json({
