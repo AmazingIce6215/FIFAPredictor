@@ -254,41 +254,42 @@ export async function generateMatchPrediction(
     const ctx = await buildContext(match, liveData)
     const prompt = buildPrompt(ctx)
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are an expert football analyst. Analyze statistical data to generate precise predictions. Respond with valid JSON only.',
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [
+              {
+                text: 'You are an expert football analyst. Analyze statistical data to generate precise predictions. Respond with valid JSON only.',
+              },
+            ],
           },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 0.3,
-        max_tokens: 1500,
-        response_format: { type: 'json_object' },
-      }),
-    })
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 1500,
+            responseMimeType: 'application/json',
+          },
+        }),
+      }
+    )
 
     if (!response.ok) {
       const errText = await response.text()
-      console.error(`[groq] API error ${response.status}: ${errText}`)
+      console.error(`[gemini] API error ${response.status}: ${errText}`)
       return null
     }
 
     const data = await response.json()
-    const content = data.choices?.[0]?.message?.content
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text
     if (!content) return null
 
     return JSON.parse(content) as PredictionResult
   } catch (e) {
-    console.error('[groq] Prediction error:', e)
+    console.error('[gemini] Prediction error:', e)
     return null
   }
 }

@@ -10,7 +10,7 @@ AI-powered win probability predictions for every FIFA World Cup 2026 match, buil
 - **Data Fetching:** SWR with 60s polling for live matches
 - **Icons:** Lucide React
 - **Fonts:** Barlow Condensed (display), Inter (body)
-- **AI:** Groq API (llama-3.3-70b-versatile)
+- **AI:** Google Gemini API (gemini-2.0-flash)
 - **APIs:** football-data.org, api-sports.io, TheSportsDB, flagcdn.com
 
 ## Getting Started
@@ -28,7 +28,7 @@ Register for free API keys:
 |---------|-----|-------------|
 | football-data.org | https://www.football-data.org/client/register | `FOOTBALL_DATA_API_KEY` |
 | api-sports.io | https://dashboard.api-football.com/register | `API_SPORTS_KEY` |
-| Groq | https://console.groq.com/keys | `GROQ_API_KEY` |
+| Google AI | https://aistudio.google.com/apikey | `GEMINI_API_KEY` |
 
 ### Installation
 
@@ -90,7 +90,7 @@ src/
 │   ├── football-data.ts           # football-data.org wrapper
 │   ├── api-sports.ts              # api-sports.io wrapper
 │   ├── thesportsdb.ts             # TheSportsDB wrapper
-│   └── groq-predict.ts            # Core AI prediction engine
+│   └── groq-predict.ts            # Core AI prediction engine (Gemini)
 ├── hooks/
 │   ├── useLiveMatch.ts            # SWR hook for live polling
 │   └── usePrediction.ts           # SWR hook for predictions
@@ -113,7 +113,7 @@ The `/api/predict` route:
 
 1. Fetches team form (last 10 matches), H2H record, season stats, and injuries
 2. Builds a structured prompt with all context
-3. Calls Groq's llama-3.3-70b-versatile with JSON mode
+3. Calls Gemini 2.0 Flash with JSON mode
 4. Returns win/draw/loss probabilities, confidence, reasoning, and key factors
 
 During live matches, predictions are regenerated every 60 seconds with live context.
