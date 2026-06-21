@@ -1,27 +1,25 @@
 import type { Metadata } from 'next'
-import { Barlow_Condensed, Barlow } from 'next/font/google'
+import { Inter, Bebas_Neue } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 
-const barlowCondensed = Barlow_Condensed({
+const bebasNeue = Bebas_Neue({
   subsets: ['latin'],
-  weight: ['400', '600', '700', '800'],
-  variable: '--font-barlow',
+  weight: '400',
+  variable: '--font-display',
   display: 'swap',
 })
 
-const barlow = Barlow({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-barlow-body',
+  variable: '--font-body',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'WC26 Predictor — FIFA World Cup 2026 AI Predictions',
+  title: 'WC26 Predict — FIFA World Cup 2026 AI Predictions',
   description:
-    'AI-powered win probability predictions for every FIFA World Cup 2026 match. Live updates, team stats, and intelligent match analysis.',
+    'Real-time AI predictions for every FIFA World Cup 2026 match. Live win probabilities, team form analysis, and intelligent match insights.',
 }
 
 export default function RootLayout({
@@ -30,13 +28,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${barlowCondensed.variable} ${barlow.variable}`}>
+    <html lang="en" className={`${bebasNeue.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-background font-body antialiased">
-        <Navbar />
-        <main className="mx-auto max-w-7xl px-4 pb-16 pt-28 sm:px-6 lg:px-8">
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   )

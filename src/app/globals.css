@@ -3,40 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --background: #0A0A0F;
-  --surface: #14141F;
-  --surface-raised: #1E1E2E;
-  --surface-hover: #282840;
-  --border: #2A2A3E;
-  --border-bright: #3E3E5C;
-
-  --primary: #DC2626;
-  --primary-dark: #B91C1C;
-  --primary-light: #FCA5A5;
-  --primary-glow: rgba(220, 38, 38, 0.25);
-
-  --gold: #FBBF24;
-  --gold-bright: #FCD34D;
-  --gold-muted: #92400E;
-  --gold-glow: rgba(251, 191, 36, 0.2);
-
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-
-  --win: #22C55E;
-  --win-dark: #166534;
-  --draw: #A3A3A3;
-  --draw-dark: #525252;
-  --loss: #EF4444;
-  --loss-dark: #991B1B;
-
-  --live-red: #EF4444;
-  --live-glow: rgba(239, 68, 68, 0.5);
-
-  --form-win: #166534;
-  --form-draw: #713F12;
-  --form-loss: #7F1D1D;
+  --bg: #040D1A;
+  --surface: #071525;
+  --card: #0A1A30;
+  --border: rgba(240,244,248,0.06);
+  --border-hi: rgba(240,244,248,0.14);
+  --chalk: #F0F4F8;
+  --ash: #8BA4C0;
+  --smoke: #4A6580;
+  --volt: #00FF87;
+  --gold: #FFD700;
+  --red: #FF3030;
+  --blue: #4D9EFF;
 }
 
 * {
@@ -48,74 +26,33 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--text-primary);
-  font-family: var(--font-barlow-body), system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--chalk);
+  font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 *:focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--volt);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 ::selection {
-  background: var(--primary);
-  color: white;
+  background: var(--volt);
+  color: #040D1A;
 }
 
 @layer utilities {
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
-  .glass {
-    background: linear-gradient(135deg, rgba(30, 30, 46, 0.7) 0%, rgba(20, 20, 31, 0.5) 100%);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--border);
-  }
-  .glass-hover:hover {
-    border-color: var(--border-bright);
-    background: linear-gradient(135deg, rgba(40, 40, 64, 0.8) 0%, rgba(30, 30, 46, 0.6) 100%);
-  }
-  .glass-red {
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, rgba(20, 20, 31, 0.4) 100%);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(220, 38, 38, 0.25);
-  }
-  .glass-red:hover {
-    border-color: rgba(220, 38, 38, 0.5);
-  }
-  .glass-gold {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(20, 20, 31, 0.4) 100%);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(251, 191, 36, 0.2);
-  }
-  .glass-gold:hover {
-    border-color: rgba(251, 191, 36, 0.4);
-  }
-  .text-gradient-gold {
-    background: linear-gradient(135deg, #FBBF24, #FCD34D);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .text-gradient-red {
-    background: linear-gradient(135deg, #DC2626, #EF4444);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .live-pulse {
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.6), 0 0 24px rgba(239, 68, 68, 0.3);
-  }
 }
 
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
-  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.15); }
-  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+@keyframes livePulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.8); opacity: 0; }
 }
 
 @keyframes shimmer {
@@ -123,18 +60,8 @@ body {
   100% { background-position: 200% 0; }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes breathe {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
 .skeleton-pulse {
-  background: linear-gradient(90deg, var(--surface-raised) 25%, var(--border) 50%, var(--surface-raised) 75%);
+  background: linear-gradient(90deg, var(--card) 25%, var(--surface) 50%, var(--card) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -160,10 +87,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--smoke);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-bright);
+  background: var(--ash);
 }
